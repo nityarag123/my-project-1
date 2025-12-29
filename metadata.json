@@ -1,0 +1,7 @@
+{
+  "name": "KVR Infra Engineering Works - Site & Truck Management",
+  "description": "A high-end, professional 3D-animated management system for construction sites, truck tracking, and loading/unloading operations with role-based access control.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
