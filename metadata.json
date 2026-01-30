@@ -1,7 +1,8 @@
 {
-  "name": "KVR Infra Engineering Works - Site & Truck Management",
+  "name": "InfraPulse 360: Advanced Engineering Control",
   "description": "A high-end, professional 3D-animated management system for construction sites, truck tracking, and loading/unloading operations with role-based access control.",
   "requestFramePermissions": [
-    "microphone"
+    "microphone",
+    "geolocation"
   ]
 }

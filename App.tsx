@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, User, UserRole, Site, Truck, LogRecord, RecordType } from './types';
+import { View, User, UserRole, Site, Truck, LogRecord, RecordType, TruckStatus } from './types';
 import * as Store from './store';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
@@ -8,10 +8,11 @@ import RegisterPage from './pages/RegisterPage';
 import SitesPage from './pages/SitesPage';
 import TrucksPage from './pages/TrucksPage';
 import DetailsPage from './pages/DetailsPage';
+import FleetDashboard from './pages/FleetDashboard';
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(Store.getCurrentUser());
-  const [view, setView] = useState<View>(currentUser ? 'SITES' : 'LOGIN');
+  const [view, setView] = useState<View>(currentUser ? 'FLEET_DASHBOARD' : 'LOGIN');
   
   const [sites, setSites] = useState<Site[]>(Store.getStoredSites());
   const [trucks, setTrucks] = useState<Truck[]>(Store.getStoredTrucks());
@@ -46,26 +47,21 @@ const App: React.FC = () => {
     if (user) {
       setCurrentUser(user);
       Store.setCurrentUser(user);
-      setView('SITES');
+      setView('FLEET_DASHBOARD');
     } else {
-      alert('Invalid username or password. Try admin/admin123');
+      alert('Invalid access credentials.');
     }
   }, [allUsers]);
 
   const handleRegister = useCallback((userData: Omit<User, 'id'>) => {
     const isDuplicate = allUsers.some(u => u.username === userData.username || u.email === userData.email);
     if (isDuplicate) {
-      alert('Username or email already exists.');
+      alert('Identity conflict detected.');
       return;
     }
-
-    const newUser: User = {
-      ...userData,
-      id: `user-${Date.now()}`
-    };
-
+    const newUser: User = { ...userData, id: `user-${Date.now()}` };
     setAllUsers(prev => [...prev, newUser]);
-    alert('Registration successful! Please sign in.');
+    alert('Deployment request submitted. Proceed to login.');
     setView('LOGIN');
   }, [allUsers]);
 
@@ -87,27 +83,7 @@ const App: React.FC = () => {
   const activeSite = sites.find(s => s.id === selectedSiteId);
   const activeTruck = trucks.find(t => t.id === selectedTruckId);
 
-  // Persistence Handlers
-  const addSite = (site: Omit<Site, 'id'>) => {
-    const newSite = { ...site, id: `site-${Date.now()}` };
-    setSites(prev => [...prev, newSite]);
-  };
-
-  const deleteSite = (id: string) => {
-    setSites(prev => prev.filter(s => s.id !== id));
-    setTrucks(prev => prev.filter(t => t.siteId !== id));
-  };
-
-  const addTruck = (truck: Omit<Truck, 'id'>) => {
-    const newTruck = { ...truck, id: `truck-${Date.now()}` };
-    setTrucks(prev => [...prev, newTruck]);
-  };
-
-  const deleteTruck = (id: string) => {
-    setTrucks(prev => prev.filter(t => t.id !== id));
-    setRecords(prev => prev.filter(r => r.truckId !== id));
-  };
-
+  // Handlers
   const addRecord = (record: Omit<LogRecord, 'id' | 'timestamp'>) => {
     const newRecord = { 
       ...record, 
@@ -142,6 +118,17 @@ const App: React.FC = () => {
       }}
       currentView={view}
     >
+      {view === 'FLEET_DASHBOARD' && (
+        <FleetDashboard 
+          sites={sites} 
+          trucks={trucks} 
+          onSelectTruck={(id) => {
+            setSelectedTruckId(id);
+            setView('DETAILS');
+          }}
+        />
+      )}
+
       {view === 'SITES' && (
         <SitesPage 
           sites={filteredSites} 
@@ -150,8 +137,8 @@ const App: React.FC = () => {
             setSelectedSiteId(id);
             setView('TRUCKS');
           }}
-          onAddSite={addSite}
-          onDeleteSite={deleteSite}
+          onAddSite={(s) => setSites([...sites, { ...s, id: `site-${Date.now()}` }])}
+          onDeleteSite={(id) => setSites(sites.filter(s => s.id !== id))}
         />
       )}
 
@@ -165,8 +152,8 @@ const App: React.FC = () => {
             setView('DETAILS');
           }}
           onBack={() => setView('SITES')}
-          onAddTruck={addTruck}
-          onDeleteTruck={deleteTruck}
+          onAddTruck={(t) => setTrucks([...trucks, { ...t, id: `truck-${Date.now()}`, status: TruckStatus.IDLE, fuelLevel: 100, lastMaintenance: new Date().toISOString().split('T')[0], nextMaintenanceInKm: 2000 }])}
+          onDeleteTruck={(id) => setTrucks(trucks.filter(t => t.id !== id))}
         />
       )}
 
@@ -175,7 +162,7 @@ const App: React.FC = () => {
           truck={activeTruck} 
           records={currentTruckRecords} 
           role={currentUser.role}
-          onBack={() => setView('TRUCKS')}
+          onBack={() => setView('FLEET_DASHBOARD')}
           onAddRecord={addRecord}
           onDeleteRecord={deleteRecord}
         />

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Truck, Site, UserRole } from '../types';
+import { Truck, Site, UserRole, TruckStatus } from '../types';
 import { ICONS } from '../constants';
 
 interface TrucksPageProps {
@@ -19,7 +19,15 @@ const TrucksPage: React.FC<TrucksPageProps> = ({ site, trucks, onSelectTruck, on
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAddTruck({ truckNumber: newTruckNumber, siteId: site.id });
+    // Added missing required properties to satisfy Omit<Truck, 'id'> type
+    onAddTruck({ 
+      truckNumber: newTruckNumber, 
+      siteId: site.id,
+      status: TruckStatus.IDLE,
+      fuelLevel: 100,
+      lastMaintenance: new Date().toISOString().split('T')[0],
+      nextMaintenanceInKm: 2000
+    });
     setNewTruckNumber('');
     setShowAddModal(false);
   };
@@ -97,7 +105,7 @@ const TrucksPage: React.FC<TrucksPageProps> = ({ site, trucks, onSelectTruck, on
 
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="glass w-full max-w-md p-8 rounded-[2.5rem] border border-white/10 shadow-2xl scale-in-center">
+          <div className="glass w-full max-md p-8 rounded-[2.5rem] border border-white/10 shadow-2xl scale-in-center">
             <h3 className="text-2xl font-bold mb-6">Register Truck</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>

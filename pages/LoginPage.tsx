@@ -37,10 +37,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onNavigateRegister }) =>
             </div>
           </div>
 
-          <h1 className="text-3xl font-extrabold text-center mb-2 bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-            KVR INFRA
+          <h1 className="text-3xl font-extrabold text-center mb-2 bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent uppercase tracking-tighter">
+            INFRAPULSE 360
           </h1>
-          <p className="text-slate-500 text-center mb-10 text-sm font-medium uppercase tracking-[0.2em]">Management Portal</p>
+          <p className="text-slate-500 text-center mb-10 text-sm font-medium uppercase tracking-[0.2em]">Advanced Command Portal</p>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
@@ -84,11 +84,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onNavigateRegister }) =>
               onClick={onNavigateRegister}
               className="text-slate-400 hover:text-white text-sm font-medium transition-colors"
             >
-              New here? Register your account
+              New here? Request Access
             </button>
             <div className="pt-8 border-t border-white/5 flex justify-between items-center px-2">
-              <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest">v2.5.0 Stable</span>
-              <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest">Secured Node</span>
+              <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest">v3.0.0 Enterprise</span>
+              <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest">AI Core Active</span>
             </div>
           </div>
         </div>

@@ -19,12 +19,22 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, c
       <aside className="w-full md:w-64 glass border-r border-white/10 flex flex-col z-20">
         <div className="p-6 border-b border-white/10">
           <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent uppercase tracking-wider">
-            KVR INFRA
+            INFRAPULSE 360
           </h1>
-          <p className="text-[10px] text-slate-500 font-semibold tracking-tighter">ENGINEERING WORKS</p>
+          <p className="text-[10px] text-slate-500 font-semibold tracking-tighter">ADVANCED ENGINEERING HUB</p>
         </div>
 
         <nav className="flex-1 p-4 space-y-2">
+          <button 
+            onClick={() => onNavigate('FLEET_DASHBOARD')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+              currentView === 'FLEET_DASHBOARD' ? 'bg-emerald-600 shadow-lg shadow-emerald-500/20 text-white' : 'hover:bg-white/5'
+            }`}
+          >
+            <ICONS.Analytics size={20} />
+            <span className="font-medium">Fleet Pulse</span>
+          </button>
+
           <button 
             onClick={() => onNavigate('SITES')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
@@ -32,11 +42,11 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, c
             }`}
           >
             <ICONS.Dashboard size={20} />
-            <span className="font-medium">Sites</span>
+            <span className="font-medium">Active Sites</span>
           </button>
           
           <div className="mt-8 px-4 py-2">
-            <p className="text-[10px] uppercase font-bold text-slate-500 tracking-widest mb-4">User Session</p>
+            <p className="text-[10px] uppercase font-bold text-slate-500 tracking-widest mb-4">Command Session</p>
             <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
               <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 border border-blue-500/30">
                 <ICONS.User size={20} />
@@ -55,7 +65,7 @@ const Layout: React.FC<LayoutProps> = ({ children, user, onLogout, onNavigate, c
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-500/10 hover:text-red-400 transition-all text-slate-400"
           >
             <ICONS.Logout size={20} />
-            <span className="font-medium">Logout</span>
+            <span className="font-medium">Logout System</span>
           </button>
         </div>
       </aside>

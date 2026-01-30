@@ -1,34 +1,59 @@
 
-import { Site, Truck, LogRecord, User, UserRole, RecordType } from './types';
+import { Site, Truck, LogRecord, User, UserRole, RecordType, TruckStatus } from './types';
 
 const STORAGE_KEYS = {
-  SITES: 'kvr_sites',
-  TRUCKS: 'kvr_trucks',
-  RECORDS: 'kvr_records',
-  USER: 'kvr_user',
-  ALL_USERS: 'kvr_all_users',
+  SITES: 'ip360_sites',
+  TRUCKS: 'ip360_trucks',
+  RECORDS: 'ip360_records',
+  USER: 'ip360_user',
+  ALL_USERS: 'ip360_all_users',
 };
 
 const INITIAL_SITES: Site[] = [
-  { id: 'site-1', name: 'Vizag Smart City Project', location: 'Visakhapatnam' },
-  { id: 'site-2', name: 'Hyderabad Metro Phase 2', location: 'Hyderabad' },
-  { id: 'site-3', name: 'Amaravati Infra Development', location: 'Vijayawada' },
+  { id: 'site-1', name: 'Vizag Smart City', location: 'Visakhapatnam', lat: 17.6868, lng: 83.2185 },
+  { id: 'site-2', name: 'Hyderabad Metro P2', location: 'Hyderabad', lat: 17.3850, lng: 78.4867 },
+  { id: 'site-3', name: 'Amaravati Infra', location: 'Vijayawada', lat: 16.5062, lng: 80.6480 },
 ];
 
 const INITIAL_USERS: User[] = [
-  { id: 'u1', username: 'admin', fullName: 'System Administrator', email: 'admin@kvrinfra.com', password: 'admin123', role: UserRole.ADMIN },
-  { id: 'u2', username: 'op1', fullName: 'Site Operator 1', email: 'op1@kvrinfra.com', password: 'op123', role: UserRole.OPERATOR, assignedSiteId: 'site-1' },
+  { id: 'u1', username: 'admin', fullName: 'Fleet Director', email: 'admin@infrapulse.com', password: 'admin', role: UserRole.ADMIN },
+  { id: 'u2', username: 'op1', fullName: 'Site Engineer 1', email: 'op1@infrapulse.com', password: 'op1', role: UserRole.OPERATOR, assignedSiteId: 'site-1' },
 ];
 
 const INITIAL_TRUCKS: Truck[] = [
-  { id: 't1', truckNumber: 'AP 31 TV 1234', siteId: 'site-1' },
-  { id: 't2', truckNumber: 'TS 09 XY 5678', siteId: 'site-1' },
-  { id: 't3', truckNumber: 'AP 16 AB 9012', siteId: 'site-2' },
+  { 
+    id: 't1', 
+    truckNumber: 'AP 31 TV 1234', 
+    siteId: 'site-1', 
+    status: TruckStatus.TRANSIT, 
+    eta: '14:30 PM', 
+    fuelLevel: 65, 
+    lastMaintenance: '2025-01-10', 
+    nextMaintenanceInKm: 1200 
+  },
+  { 
+    id: 't2', 
+    truckNumber: 'TS 09 XY 5678', 
+    siteId: 'site-1', 
+    status: TruckStatus.LOADING, 
+    fuelLevel: 42, 
+    lastMaintenance: '2024-12-15', 
+    nextMaintenanceInKm: 150 
+  },
+  { 
+    id: 't3', 
+    truckNumber: 'AP 16 AB 9012', 
+    siteId: 'site-2', 
+    status: TruckStatus.MAINTENANCE, 
+    fuelLevel: 12, 
+    lastMaintenance: '2025-02-01', 
+    nextMaintenanceInKm: 0 
+  },
 ];
 
 const INITIAL_RECORDS: LogRecord[] = [
-  { id: 'r1', truckId: 't1', material: 'Cement', quantity: '20 Tons', type: RecordType.LOADING, timestamp: new Date().toISOString() },
-  { id: 'r2', truckId: 't1', material: 'Sand', quantity: '15 Tons', type: RecordType.UNLOADING, timestamp: new Date().toISOString() },
+  { id: 'r1', truckId: 't1', material: 'Structural Steel', quantity: '12 Tons', type: RecordType.LOADING, timestamp: new Date().toISOString() },
+  { id: 'r2', truckId: 't1', material: 'Delivery Manifest', quantity: 'N/A', type: RecordType.POD, timestamp: new Date().toISOString(), podImageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400', notes: 'Received by Site Lead' },
 ];
 
 export const getStoredSites = (): Site[] => {

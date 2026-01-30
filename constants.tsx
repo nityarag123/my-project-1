@@ -20,7 +20,14 @@ import {
   Search,
   Zap,
   BrainCircuit,
-  X
+  X,
+  Navigation,
+  Fuel,
+  Wrench,
+  ShieldCheck,
+  BarChart3,
+  Camera,
+  PenTool
 } from 'lucide-react';
 
 export const ICONS = {
@@ -43,7 +50,14 @@ export const ICONS = {
   Search: Search,
   Fast: Zap,
   Think: BrainCircuit,
-  Close: X
+  Close: X,
+  Route: Navigation,
+  Fuel: Fuel,
+  Maintenance: Wrench,
+  Security: ShieldCheck,
+  Analytics: BarChart3,
+  Camera: Camera,
+  Sign: PenTool
 };
 
 export const COLORS = {
