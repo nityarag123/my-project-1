@@ -10,7 +10,7 @@ import {
   Trash2, 
   Edit, 
   MapPin,
-  Package,
+  Package, 
   ArrowUpDown,
   User as UserIcon,
   Sparkles,
@@ -27,7 +27,11 @@ import {
   ShieldCheck,
   BarChart3,
   Camera,
-  PenTool
+  PenTool,
+  Star,
+  LifeBuoy,
+  Settings,
+  CheckCircle2
 } from 'lucide-react';
 
 export const ICONS = {
@@ -48,16 +52,22 @@ export const ICONS = {
   Mic: Mic,
   MicOff: MicOff,
   Search: Search,
-  Fast: Zap,
+  Zap: Zap,
+  BrainCircuit: BrainCircuit,
   Think: BrainCircuit,
-  Close: X,
+  X: X,
+  Close: X, 
   Route: Navigation,
   Fuel: Fuel,
   Maintenance: Wrench,
   Security: ShieldCheck,
   Analytics: BarChart3,
   Camera: Camera,
-  Sign: PenTool
+  Sign: PenTool,
+  Star: Star,
+  Help: LifeBuoy,
+  Settings: Settings,
+  Success: CheckCircle2
 };
 
 export const COLORS = {

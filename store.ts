@@ -1,5 +1,5 @@
 
-import { Site, Truck, LogRecord, User, UserRole, RecordType, TruckStatus } from './types';
+import { Site, Truck, LogRecord, User, UserRole, RecordType, TruckStatus, VehicleType, Booking, ServiceRequest } from './types';
 
 const STORAGE_KEYS = {
   SITES: 'ip360_sites',
@@ -7,58 +7,51 @@ const STORAGE_KEYS = {
   RECORDS: 'ip360_records',
   USER: 'ip360_user',
   ALL_USERS: 'ip360_all_users',
+  BOOKINGS: 'ip360_bookings',
+  VEHICLE_TYPES: 'ip360_vehicle_catalog',
+  SERVICE_REQUESTS: 'ip360_service_requests',
 };
 
-const INITIAL_SITES: Site[] = [
-  { id: 'site-1', name: 'Vizag Smart City', location: 'Visakhapatnam', lat: 17.6868, lng: 83.2185 },
-  { id: 'site-2', name: 'Hyderabad Metro P2', location: 'Hyderabad', lat: 17.3850, lng: 78.4867 },
-  { id: 'site-3', name: 'Amaravati Infra', location: 'Vijayawada', lat: 16.5062, lng: 80.6480 },
+const INITIAL_VEHICLE_TYPES: VehicleType[] = [
+  { id: 'v1', name: 'Auto 3-Wheeler', capacity: '500 KG', dimensions: '4x3x3 ft', basePriceKm: 15, waitingChargeHr: 50, icon: 'Truck', description: 'Perfect for small city deliveries.', isActive: true },
+  { id: 'v2', name: 'Mini Truck (Tata Ace)', capacity: '1.5 Tons', dimensions: '7x4.5x5 ft', basePriceKm: 25, waitingChargeHr: 100, icon: 'Truck', description: 'The "Chota Hathi" for bulk goods.', isActive: true },
+  { id: 'v3', name: 'Tempo (Eicher)', capacity: '4 Tons', dimensions: '14x7x7 ft', basePriceKm: 45, waitingChargeHr: 200, icon: 'Truck', description: 'Ideal for medium warehouse shifts.', isActive: true },
+  { id: 'v6', name: 'Container Truck', capacity: '32 Tons', dimensions: '40x8x8.5 ft', basePriceKm: 150, waitingChargeHr: 800, icon: 'Truck', description: 'Maximum safety for sensitive cargo.', isActive: true },
 ];
 
-const INITIAL_USERS: User[] = [
-  { id: 'u1', username: 'admin', fullName: 'Fleet Director', email: 'admin@infrapulse.com', password: 'admin', role: UserRole.ADMIN },
-  { id: 'u2', username: 'op1', fullName: 'Site Engineer 1', email: 'op1@infrapulse.com', password: 'op1', role: UserRole.OPERATOR, assignedSiteId: 'site-1' },
-];
+export const getStoredVehicleTypes = (): VehicleType[] => {
+  const data = localStorage.getItem(STORAGE_KEYS.VEHICLE_TYPES);
+  return data ? JSON.parse(data) : INITIAL_VEHICLE_TYPES;
+};
 
-const INITIAL_TRUCKS: Truck[] = [
-  { 
-    id: 't1', 
-    truckNumber: 'AP 31 TV 1234', 
-    siteId: 'site-1', 
-    status: TruckStatus.TRANSIT, 
-    eta: '14:30 PM', 
-    fuelLevel: 65, 
-    lastMaintenance: '2025-01-10', 
-    nextMaintenanceInKm: 1200 
-  },
-  { 
-    id: 't2', 
-    truckNumber: 'TS 09 XY 5678', 
-    siteId: 'site-1', 
-    status: TruckStatus.LOADING, 
-    fuelLevel: 42, 
-    lastMaintenance: '2024-12-15', 
-    nextMaintenanceInKm: 150 
-  },
-  { 
-    id: 't3', 
-    truckNumber: 'AP 16 AB 9012', 
-    siteId: 'site-2', 
-    status: TruckStatus.MAINTENANCE, 
-    fuelLevel: 12, 
-    lastMaintenance: '2025-02-01', 
-    nextMaintenanceInKm: 0 
-  },
-];
+export const saveVehicleTypes = (types: VehicleType[]) => {
+  localStorage.setItem(STORAGE_KEYS.VEHICLE_TYPES, JSON.stringify(types));
+};
 
-const INITIAL_RECORDS: LogRecord[] = [
-  { id: 'r1', truckId: 't1', material: 'Structural Steel', quantity: '12 Tons', type: RecordType.LOADING, timestamp: new Date().toISOString() },
-  { id: 'r2', truckId: 't1', material: 'Delivery Manifest', quantity: 'N/A', type: RecordType.POD, timestamp: new Date().toISOString(), podImageUrl: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=400', notes: 'Received by Site Lead' },
-];
+export const getStoredBookings = (): Booking[] => {
+  const data = localStorage.getItem(STORAGE_KEYS.BOOKINGS);
+  return data ? JSON.parse(data) : [];
+};
+
+export const saveBookings = (bookings: Booking[]) => {
+  localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+};
+
+export const getStoredServiceRequests = (): ServiceRequest[] => {
+  const data = localStorage.getItem(STORAGE_KEYS.SERVICE_REQUESTS);
+  return data ? JSON.parse(data) : [];
+};
+
+export const saveServiceRequests = (requests: ServiceRequest[]) => {
+  localStorage.setItem(STORAGE_KEYS.SERVICE_REQUESTS, JSON.stringify(requests));
+};
 
 export const getStoredSites = (): Site[] => {
   const data = localStorage.getItem(STORAGE_KEYS.SITES);
-  return data ? JSON.parse(data) : INITIAL_SITES;
+  return data ? JSON.parse(data) : [
+    { id: 'site-1', name: 'Hyderabad Metro Phase 2', location: 'Hyderabad', lat: 17.3850, lng: 78.4867, queue: [], productivityScore: 88, activeTrips: 12 },
+    { id: 'site-2', name: 'Bengaluru IT Corridor', location: 'Bengaluru', lat: 12.9716, lng: 77.5946, queue: [], productivityScore: 92, activeTrips: 8 }
+  ];
 };
 
 export const saveSites = (sites: Site[]) => {
@@ -67,7 +60,12 @@ export const saveSites = (sites: Site[]) => {
 
 export const getStoredUsers = (): User[] => {
   const data = localStorage.getItem(STORAGE_KEYS.ALL_USERS);
-  return data ? JSON.parse(data) : INITIAL_USERS;
+  const initialUsers: User[] = [
+    { id: 'u1', username: 'admin', fullName: 'Fleet Director', email: 'admin@infrapulse.com', password: 'admin', role: UserRole.ADMIN },
+    { id: 'u2', username: 'op1', fullName: 'Site Engineer 1', email: 'op1@infrapulse.com', password: 'op1', role: UserRole.OPERATOR, assignedSiteId: 'site-1' },
+    { id: 'u3', username: 'cust1', fullName: 'Rohan Sharma', email: 'rohan@gmail.com', password: 'cust1', role: UserRole.CUSTOMER },
+  ];
+  return data ? JSON.parse(data) : initialUsers;
 };
 
 export const saveUsers = (users: User[]) => {
@@ -76,7 +74,7 @@ export const saveUsers = (users: User[]) => {
 
 export const getStoredTrucks = (): Truck[] => {
   const data = localStorage.getItem(STORAGE_KEYS.TRUCKS);
-  return data ? JSON.parse(data) : INITIAL_TRUCKS;
+  return data ? JSON.parse(data) : [];
 };
 
 export const saveTrucks = (trucks: Truck[]) => {
@@ -85,7 +83,7 @@ export const saveTrucks = (trucks: Truck[]) => {
 
 export const getStoredRecords = (): LogRecord[] => {
   const data = localStorage.getItem(STORAGE_KEYS.RECORDS);
-  return data ? JSON.parse(data) : INITIAL_RECORDS;
+  return data ? JSON.parse(data) : [];
 };
 
 export const saveRecords = (records: LogRecord[]) => {

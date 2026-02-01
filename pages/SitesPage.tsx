@@ -17,7 +17,15 @@ const SitesPage: React.FC<SitesPageProps> = ({ sites, onSelectSite, role, onAddS
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onAddSite(newSite);
+    // Fix: Added missing 'queue' property to satisfy Omit<Site, 'id'> type
+    onAddSite({ 
+      ...newSite, 
+      lat: 0, 
+      lng: 0, 
+      productivityScore: 0, 
+      activeTrips: 0,
+      queue: [] 
+    });
     setNewSite({ name: '', location: '' });
     setShowAddModal(false);
   };

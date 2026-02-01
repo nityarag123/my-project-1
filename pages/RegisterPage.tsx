@@ -16,7 +16,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ sites, onRegister, onNaviga
     email: '',
     password: '',
     confirmPassword: '',
-    role: UserRole.OPERATOR,
+    role: UserRole.CUSTOMER,
     assignedSiteId: ''
   });
   const [error, setError] = useState('');
@@ -57,7 +57,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ sites, onRegister, onNaviga
               <h1 className="text-3xl font-extrabold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
                 Registration
               </h1>
-              <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Join KVR Infra Network</p>
+              <p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-1">Join InfraPulse 360 Network</p>
             </div>
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-emerald-500 p-[1px]">
               <div className="w-full h-full rounded-[0.9rem] bg-slate-900 flex items-center justify-center text-blue-400">
@@ -98,7 +98,7 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ sites, onRegister, onNaviga
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                placeholder="john@kvrinfra.com"
+                placeholder="john@example.com"
                 required
               />
             </div>
@@ -134,8 +134,9 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ sites, onRegister, onNaviga
                 onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
                 className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500/50 appearance-none text-slate-300"
               >
-                <option value={UserRole.OPERATOR} className="bg-slate-900">Operator</option>
-                <option value={UserRole.ADMIN} className="bg-slate-900">Admin</option>
+                <option value={UserRole.CUSTOMER} className="bg-slate-900">Customer (Booking)</option>
+                <option value={UserRole.OPERATOR} className="bg-slate-900">Operator (Site Team)</option>
+                <option value={UserRole.ADMIN} className="bg-slate-900">Admin (Fleet Director)</option>
               </select>
             </div>
 
